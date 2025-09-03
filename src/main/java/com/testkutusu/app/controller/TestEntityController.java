@@ -1,8 +1,10 @@
 package com.testkutusu.app.controller;
 
 
+import com.testkutusu.app.dto.TestDto;
 import com.testkutusu.app.entity.TestEntity;
 import com.testkutusu.app.service.TestEntityService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +22,10 @@ public class TestEntityController {
 
     //yeni bir test ekleme
     @PostMapping("/create")
-    public TestEntity createTestEntity(@RequestBody TestEntity testEntity){
-        return testEntityService.createTestEntity(testEntity);
+    public TestEntity createTest(@Valid @RequestBody TestDto dto) {
+        return testEntityService.saveTest(dto);
     }
+
 
     //bütün testleri listeleme
     @GetMapping

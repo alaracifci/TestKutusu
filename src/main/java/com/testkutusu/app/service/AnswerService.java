@@ -25,7 +25,7 @@ public class AnswerService {
     }
 
     //tek cevap almak
-    public AnswerEntity getAnswerByQuestionId(Long questionId){
+    public List<AnswerEntity> getAnswerByQuestionId(Long questionId){
         return answerRepository.findByQuestionId(questionId);
     }
 
@@ -37,9 +37,10 @@ public class AnswerService {
     }
 
     //cevabı güncelleme
-    public AnswerEntity updateAnswerToQuestion(Long questionId, AnswerEntity answerEntity){
-        AnswerEntity existingAnswer=answerRepository.findById(questionId).orElseThrow(()-> new RuntimeException("ANswer not found"));
-        existingAnswer.setText(answerEntity.getText());
+    public AnswerEntity updateAnswerToQuestion(Long AnswerId, AnswerEntity answerEntity){
+        AnswerEntity existingAnswer=answerRepository.findById(AnswerId).orElseThrow(()-> new RuntimeException("Answer not found"));
+        existingAnswer.setStudentAnswer(answerEntity.getStudentAnswer());
+        existingAnswer.setCorrect(answerEntity.isCorrect());
         return answerRepository.save(existingAnswer);
     }
 

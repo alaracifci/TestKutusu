@@ -31,7 +31,7 @@ public class AnswerController {
 
     //bir sorunun cevabını almak
     @GetMapping("/answers/question/{questionId}")
-    public AnswerEntity getAnswerByQuestionId(@PathVariable Long questionId){
+    public List<AnswerEntity> getAnswerByQuestionId(@PathVariable Long questionId){
         return answerService.getAnswerByQuestionId(questionId);
     }
 

@@ -2,11 +2,16 @@ package com.testkutusu.app.service;
 
 
 
+import com.testkutusu.app.dto.StudentDto;
+import com.testkutusu.app.dto.TestDto;
+import com.testkutusu.app.entity.Student;
 import com.testkutusu.app.entity.TestEntity;
 import com.testkutusu.app.repository.TestEntityRepository;
+import com.testkutusu.app.util.PasswordUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -34,10 +39,17 @@ public class TestEntityService {
     }
 
     //test oluşturma
-    @Transactional
-    public TestEntity createTestEntity(TestEntity testEntity){
-        return testEntityRepository.save(testEntity);
+    public TestEntity saveTest(TestDto dto) {
+        TestEntity test = TestEntity.builder()
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .active(true)
+                .createdAt(LocalDateTime.now()) // veya dto.getCreatedAt() kullanabilirsin
+                .build();
+
+        return testEntityRepository.save(test);
     }
+
 
     //testi güncelleme
     @Transactional

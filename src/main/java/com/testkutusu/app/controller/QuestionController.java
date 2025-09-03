@@ -19,7 +19,7 @@ public class QuestionController {
 
     //belirli bir teste soru ekle
     @PostMapping("/tests/{testId}/questions")
-    private Question addQuestionToTest(@PathVariable Long testId, @RequestBody Question question){
+    public Question addQuestionToTest(@PathVariable Long testId, @RequestBody Question question){
         return questionService.addQuestionToTest(testId,question);
     }
 

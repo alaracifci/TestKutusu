@@ -31,7 +31,7 @@ public class StudentTest {
     private java.time.LocalDateTime participationDate;  //öğrencinin teste katılma tarihi
 
     //öğrencinin verdiği cevaplar
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "studentTest", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AnswerEntity> answerEntity;
 
 }

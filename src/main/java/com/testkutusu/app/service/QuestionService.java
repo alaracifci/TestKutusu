@@ -46,7 +46,18 @@ public class QuestionService {
     //soru güncelleme
     public Question updateQuestion(Long questionId, Question question){
         Question existingQuestion=questionRepository.findById(questionId).orElseThrow(()-> new RuntimeException("Question not found"));
+
         existingQuestion.setText(question.getText());
+        existingQuestion.setCorrectAnswer(question.getCorrectAnswer());
+        existingQuestion.setOptionA(question.getOptionA());
+        existingQuestion.setOptionB(question.getOptionB());
+        existingQuestion.setOptionC(question.getOptionC());
+        existingQuestion.setOptionD(question.getOptionD());
+        existingQuestion.setOptionE(question.getOptionE());
+
+        if (question.getCorrectAnswer()!=null){
+            existingQuestion.setCorrectAnswer(question.getCorrectAnswer());
+        }
         return questionRepository.save(existingQuestion);
     }
 
