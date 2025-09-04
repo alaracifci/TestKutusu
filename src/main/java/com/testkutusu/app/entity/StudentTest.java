@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,9 @@ public class StudentTest {
 
     private Double score; //öğrencinin testten aldığı puan
     private java.time.LocalDateTime participationDate;  //öğrencinin teste katılma tarihi
+
+    @OneToMany(mappedBy = "studentTest", fetch = FetchType.LAZY)
+    private List<AnswerEntity> answers= new ArrayList<>();
 
     //öğrencinin verdiği cevaplar
     @OneToMany(mappedBy = "studentTest", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

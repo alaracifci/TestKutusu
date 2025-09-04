@@ -1,6 +1,7 @@
 package com.testkutusu.app.controller;
 
 
+import com.testkutusu.app.dto.QuestionDto;
 import com.testkutusu.app.entity.Question;
 import com.testkutusu.app.service.QuestionService;
 import org.springframework.web.bind.annotation.*;
@@ -19,33 +20,38 @@ public class QuestionController {
 
     //belirli bir teste soru ekle
     @PostMapping("/tests/{testId}/questions")
-    public Question addQuestionToTest(@PathVariable Long testId, @RequestBody Question question){
-        return questionService.addQuestionToTest(testId,question);
+    public QuestionDto addQuestionToTest(@PathVariable Long testId, @RequestBody QuestionDto questionDto){
+        Question question=questionService.convertToEntity(testId,questionDto);
+        return questionService.convertToDto(question);
     }
 
     //tüm soruları listele
     @GetMapping
-    public List<Question> getAllQuestions(){
-        return questionService.getAllQuestions();
+    public List<QuestionDto> getAllQuestions(){
+        return questionService.convertToDoList(questionService.getAllQuestions());
     }
 
     //belirli bir soru listele
     @GetMapping("/tests/{testId}/questions")
-    public List<Question> getAllQuestionsByTest(@PathVariable Long testId){
-        return questionService.getQuestionByTest(testId);
+    public List<QuestionDto> getAllQuestionsByTest(@PathVariable Long testId){
+        return questionService.convertToDoList(questionService.getQuestionByTest(testId));
     }
 
     //tek bir soruyu id ile getir
     @GetMapping("/questions/{id}")
-    public Question getQuestionById(@PathVariable Long id){
-        return questionService.getQuestionById(id);
+    public QuestionDto getQuestionById(@PathVariable Long id){
+        return questionService.convertToDto(questionService.getQuestionById(id));
     }
 
     //soru güncelle
     @PutMapping("/questions/{id}")
-    public Question updateQuestion(@PathVariable Long id, @RequestBody Question question) {
-        return questionService.updateQuestion(id, question);
+    public QuestionDto updateQuestion(@PathVariable Long id, @RequestBody QuestionDto questionDto) {
+        Question question = questionService.convertToEntity(id,questionDto); // ← burası artık çalışacak
+        Question updated = questionService.updateQuestion(id, question);
+        return questionService.convertToDto(updated);
     }
+
+
     //soruyu sil
     @DeleteMapping("/questions/{id}")
     public void deleteQuestionById(@PathVariable Long id) {

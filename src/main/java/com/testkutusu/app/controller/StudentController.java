@@ -22,8 +22,15 @@ public class StudentController {
     //Register
     // yeni öğrenci ekleme - kullanıcı tarafından
     @PostMapping("/register")
-    public Student register(@Valid @RequestParam String firstName, String lastName, String studentNumber, String email, String password){
-        return studentService.register(firstName, lastName, studentNumber, email, password);
+    public Student register(@Valid @RequestBody StudentDto dto){
+        Student student = Student.builder()
+                .firstName(dto.firstName())
+                .lastName(dto.lastName())
+                .studentNumber(dto.studentNumber())
+                .email(dto.email())
+                .password(dto.password())
+                .build();
+        return studentService.saveStudent(student);
     }
     //Login
     @PostMapping("/login")

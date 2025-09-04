@@ -1,6 +1,7 @@
 package com.testkutusu.app.controller;
 
 
+import com.testkutusu.app.dto.AnswerDto;
 import com.testkutusu.app.entity.AnswerEntity;
 import com.testkutusu.app.service.AnswerService;
 import org.springframework.web.bind.annotation.*;
@@ -19,27 +20,29 @@ public class AnswerController {
 
     //yeni bir cevap ekleme
     @PostMapping("/new/{questionId}")
-    public AnswerEntity createAnswer(@PathVariable Long questionId, @RequestBody AnswerEntity answer){
-        return answerService.addAnswerToQuestion(questionId,answer);
+    public AnswerDto createAnswer( @RequestBody AnswerDto dto){
+        AnswerEntity answer=answerService.addAnswer(dto);
+        return answerService.convertToDTo(answer);
     }
 
     //tüm cevapları listeleme
     @GetMapping
-    public List<AnswerEntity> getAllAnswers(){
-        return answerService.getAllAnswers();
+    public List<AnswerDto> getAllAnswers(){
+        return answerService.convertToDoList(answerService.getAllAnswers());
     }
 
     //bir sorunun cevabını almak
     @GetMapping("/answers/question/{questionId}")
-    public List<AnswerEntity> getAnswerByQuestionId(@PathVariable Long questionId){
-        return answerService.getAnswerByQuestionId(questionId);
+    public List<AnswerDto> getAnswerByQuestionId(@PathVariable Long questionId){
+        return answerService.convertToDoList(answerService.getAnswerByQuestionId(questionId));
     }
 
 
     //cevabı güncellemek
     @PutMapping("/answers/{id}")
-    public AnswerEntity updateAnswer(@PathVariable Long id, @RequestBody AnswerEntity answer){
-        return answerService.updateAnswerToQuestion(id,answer);
+    public AnswerDto updateAnswer(@PathVariable Long id, @RequestBody AnswerDto dto){
+        AnswerEntity update=answerService.updateAnswerToQuestion(id,dto);
+        return answerService.convertToDTo(update);
     }
 
     //cevabı silmek

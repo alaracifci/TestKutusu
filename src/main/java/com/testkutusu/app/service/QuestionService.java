@@ -3,11 +3,13 @@ package com.testkutusu.app.service;
 
 import com.testkutusu.app.entity.Question;
 import com.testkutusu.app.entity.TestEntity;
+import com.testkutusu.app.dto.QuestionDto;
 import com.testkutusu.app.repository.QuestionRepository;
 import com.testkutusu.app.repository.TestEntityRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -21,11 +23,39 @@ public class QuestionService {
     }
 
     //teste soru ekleme
-    public Question addQuestionToTest(Long testId, Question question){
+    public Question convertToEntity(Long testId, QuestionDto questionDto){
         TestEntity testEntity=testEntityRepository.findById(testId).orElseThrow(() -> new RuntimeException("test not found"));
-        question.setTestEntity(testEntity);
+        Question question=Question.builder()
+                .text(questionDto.getText())
+                .correctAnswer(questionDto.getCorrectAnswer())
+                .optionA(questionDto.getOptionA())
+                .optionB(questionDto.getOptionB())
+                .optionC(questionDto.getOptionC())
+                .optionD(questionDto.getOptionD())
+                .optionE(questionDto.getOptionE())
+                .testEntity(testEntity)
+                .build();
         return questionRepository.save(question);
+    }
 
+
+    //entity DTO dönüşümü
+    public QuestionDto convertToDto(Question question){
+        return QuestionDto.builder()
+                .id(question.getId())
+                .text(question.getText())
+                .correctAnswer(question.getCorrectAnswer())
+                .optionA(question.getOptionA())
+                .optionB(question.getOptionB())
+                .optionC(question.getOptionC())
+                .optionD(question.getOptionD())
+                .optionE(question.getOptionE())
+                .testId(question.getTestEntity().getId())
+                .build();
+    }
+
+    public List<QuestionDto> convertToDoList(List<Question>questions){
+        return questions.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     //tüm soruları listele

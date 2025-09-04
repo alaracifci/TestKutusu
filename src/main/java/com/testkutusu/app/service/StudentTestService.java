@@ -1,6 +1,7 @@
 package com.testkutusu.app.service;
 
 
+import com.testkutusu.app.dto.StudentTestDto;
 import com.testkutusu.app.entity.Student;
 import com.testkutusu.app.entity.StudentTest;
 import com.testkutusu.app.entity.TestEntity;
@@ -10,6 +11,7 @@ import com.testkutusu.app.repository.TestEntityRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentTestService {
@@ -24,7 +26,7 @@ public class StudentTestService {
         this.testEntityRepository=testEntityRepository;
     }
 
-    //öğrenciyi test kaydet
+    //öğrenciyi teste kaydet
     public StudentTest assignStudentToTest(Long studentId, Long testId){
         Student student=studentRepository.findById(studentId).orElseThrow(()-> new RuntimeException("student not found"));
         TestEntity testEntity=testEntityRepository.findById(testId).orElseThrow(()-> new RuntimeException("test not found"));
@@ -58,5 +60,27 @@ public class StudentTestService {
     //kayıt silme
     public void deleteStudentTestById(Long studentId, Long testId) {
         studentTestRepository.deleteByStudent_IdAndTestEntity_Id(studentId, testId);
+    }
+
+
+    //entity-Dto dönüşümü
+    public StudentTestDto convertToDto(StudentTest studentTest){
+        List<Long> answerIds= null;
+        if (studentTest.getAnswerEntity() != null){
+            answerIds=studentTest.getAnswerEntity().stream().map(answer -> answer.getId()).collect(Collectors.toList());
+        }
+        return StudentTestDto.builder()
+                .id(studentTest.getId())
+                .studentId(studentTest.getStudent().getId())
+                .testId(studentTest.getTestEntity().getId())
+                .score(studentTest.getScore())
+                .participationDate(studentTest.getParticipationDate())
+                .answerIds(answerIds)
+                .build();
+    }
+
+    //Listeyi DTO listesine çevirme
+    public List<StudentTestDto> convertToDoList(List<StudentTest> studentTest){
+        return studentTest.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 }
