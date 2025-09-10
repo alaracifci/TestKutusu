@@ -31,7 +31,7 @@ public class StudentTest {
     private Double score; //öğrencinin testten aldığı puan
     private java.time.LocalDateTime participationDate;  //öğrencinin teste katılma tarihi
 
-    @OneToMany(mappedBy = "studentTest", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "studentTest", fetch = FetchType.EAGER)
     private List<AnswerEntity> answers= new ArrayList<>();
 
     //öğrencinin verdiği cevaplar

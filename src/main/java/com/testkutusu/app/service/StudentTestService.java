@@ -8,6 +8,7 @@ import com.testkutusu.app.entity.TestEntity;
 import com.testkutusu.app.repository.StudentRepository;
 import com.testkutusu.app.repository.StudentTestRepository;
 import com.testkutusu.app.repository.TestEntityRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,14 +28,14 @@ public class StudentTestService {
     }
 
     //öğrenciyi teste kaydet
-    public StudentTest assignStudentToTest(Long studentId, Long testId){
+    public StudentTest assignStudentToTest(Long studentId, Long testId, Double score){
         Student student=studentRepository.findById(studentId).orElseThrow(()-> new RuntimeException("student not found"));
         TestEntity testEntity=testEntityRepository.findById(testId).orElseThrow(()-> new RuntimeException("test not found"));
 
         StudentTest studentTest=new StudentTest();
         studentTest.setStudent(student);
         studentTest.setTestEntity(testEntity);
-        studentTest.setScore(0.0);
+        studentTest.setScore(score != null ? score : 0.0);
 
         return studentTestRepository.save(studentTest);
     }
@@ -57,6 +58,7 @@ public class StudentTestService {
 
     }
 
+    @Transactional
     //kayıt silme
     public void deleteStudentTestById(Long studentId, Long testId) {
         studentTestRepository.deleteByStudent_IdAndTestEntity_Id(studentId, testId);

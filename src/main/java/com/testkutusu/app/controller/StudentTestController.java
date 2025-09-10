@@ -19,9 +19,13 @@ public class StudentTestController {
     }
 
     //yeni kayıt(öğrenci-test eşleşmesi)
-    @PostMapping("/student/{studentId}/test/{testId}")
-    public StudentTestDto addStudentTest(@PathVariable Long studentId, @PathVariable Long testId){
-        StudentTest studentTest=studentTestService.assignStudentToTest(studentId,testId);
+    @PostMapping
+    public StudentTestDto addStudentTest(@RequestBody StudentTestDto dto){
+        StudentTest studentTest = studentTestService.assignStudentToTest(
+                dto.getStudentId(),
+                dto.getTestId(),
+                dto.getScore()   // JSON'dan gelen score
+        );
         return studentTestService.convertToDto(studentTest);
     }
 
@@ -40,9 +44,15 @@ public class StudentTestController {
     }
 
     //skor güncelleme
-    @PutMapping("/student/{studentId}/test/{testId}/score/{newScore}")
-    public StudentTestDto updateScore(@PathVariable Long studentId, @PathVariable Long testId, @PathVariable Double newScore){
-        StudentTest studentTest=studentTestService.updateScore(studentId,testId,newScore);
+    @PutMapping("/student/{studentId}/test/{testId}/score")
+    public StudentTestDto updateScore(@PathVariable Long studentId,
+                                      @PathVariable Long testId,
+                                      @RequestBody StudentTestDto dto){
+        StudentTest studentTest = studentTestService.updateScore(
+                studentId,
+                testId,
+                dto.getScore()   // JSON'dan gelen yeni score
+        );
         return studentTestService.convertToDto(studentTest);
     }
 
